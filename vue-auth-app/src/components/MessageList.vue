@@ -1,18 +1,19 @@
 <template>
   <div class="message-list-container">
-    <h2>Mensajes del Chat</h2>
     <div v-if="loading" class="loading-message">Cargando mensajes...</div>
     <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     <div v-if="messages.length === 0 && !loading && !errorMessage" class="no-messages">
       No hay mensajes para mostrar.
     </div>
     <ul class="message-list">
-      <li v-for="message in sortedMessages" :key="message.Id" class="message-item">
-        <div class="message-header">
-          <span class="message-sender">{{ message.Login_Emisor }}</span>
-          <span class="message-time">{{ formatDateTime(message.Fecha_Envio) }}</span>
+      <li v-for="message in sortedMessages" :key="message.Id" class="message-item" :class="{ 'is-sender': message.Login_Emisor === username }">
+        <div class="message-bubble">
+          <div class="message-header">
+            <span class="message-sender">{{ message.Login_Emisor }}</span>
+            <span class="message-time">{{ formatDateTime(message.Fecha_Envio) }}</span>
+          </div>
+          <div class="message-content">{{ message.Contenido }}</div>
         </div>
-        <div class="message-content">{{ message.Contenido }}</div>
       </li>
     </ul>
     <button @click="fetchMessages" class="refresh-button">Actualizar Mensajes</button>
@@ -27,6 +28,7 @@ export default {
       messages: [],
       loading: false,
       errorMessage: '',
+      username: localStorage.getItem('username') || '',
     };
   },
   computed: {
@@ -53,7 +55,7 @@ export default {
       }
 
       try {
-        const response = await fetch('https://backcvbgtmdesa.azurewebsites.net/api/Mensajes', {
+        const response = await fetch(' https://backend-listm.onrender.com/api/mensajes' , {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${authToken}`,
@@ -83,88 +85,80 @@ export default {
 
 <style scoped>
 .message-list-container {
-  max-width: 600px;
-  margin: 50px auto;
+  flex-grow: 1;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-}
-
-h2 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.loading-message, .error-message, .no-messages {
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-.error-message {
-  color: red;
-}
-
-.no-messages {
-  color: #777;
+  overflow-y: auto;
+  background-color: #ffffff;
 }
 
 .message-list {
   list-style: none;
   padding: 0;
-  max-height: 400px; /* Limit height for scrolling */
-  overflow-y: auto;
-  border: 1px solid #eee;
-  border-radius: 4px;
-  padding: 10px;
-  margin-bottom: 20px;
 }
 
 .message-item {
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #eee;
-  padding: 10px;
-  margin-bottom: 5px;
-  border-radius: 4px;
+  display: flex;
+  margin-bottom: 15px;
 }
 
-.message-item:last-child {
-  border-bottom: none;
+.message-bubble {
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 20px;
+  line-height: 1.5;
 }
 
 .message-header {
-  display: flex;
-  justify-content: space-between;
+  font-size: 0.8em;
+  color: #666;
   margin-bottom: 5px;
-  font-size: 0.9em;
-  color: #555;
 }
 
 .message-sender {
   font-weight: bold;
-  color: #007bff;
 }
 
 .message-time {
-  color: #888;
+  margin-left: 10px;
 }
 
-.message-content {
-  text-align: left;
+/* Differentiate between user's messages and others' messages */
+.message-item.is-sender .message-bubble {
+  background-color: #007bff;
+  color: white;
+  margin-left: auto;
+  text-align: right;
+}
+
+.message-item:not(.is-sender) .message-bubble {
+  background-color: #e9e9eb;
   color: #333;
+  margin-right: auto;
+  text-align: left;
+}
+
+.loading-message, .error-message, .no-messages {
+  text-align: center;
+  padding: 20px;
+  color: #777;
+}
+
+.error-message {
+  color: #dc3545;
 }
 
 .refresh-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #6c757d; /* Grey for refresh */
+  display: block;
+  width: fit-content;
+  margin: 10px auto;
+  padding: 8px 15px;
+  background-color: #6c757d;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 20px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
+  transition: background-color 0.3s;
 }
 
 .refresh-button:hover {

@@ -1,11 +1,7 @@
 <template>
   <div class="message-form-container">
-    <h2>Enviar Mensaje</h2>
     <form @submit.prevent="sendMessage">
-      <div class="form-group">
-        <label for="messageContent">Mensaje:</label>
-        <textarea id="messageContent" v-model="messageContent" rows="5" required></textarea>
-      </div>
+      <textarea id="messageContent" v-model="messageContent" rows="1" placeholder="Escribe un mensaje..." required></textarea>
       <button type="submit">Enviar</button>
     </form>
     <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
@@ -77,64 +73,59 @@ export default {
 
 <style scoped>
 .message-form-container {
-  max-width: 400px;
-  margin: 50px auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  background-color: #f7f7f7;
+  border-top: 1px solid #eee;
 }
 
-h2 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  color: #555;
+form {
+  display: flex;
+  align-items: center;
 }
 
 textarea {
-  width: 100%;
-  padding: 10px;
+  flex-grow: 1;
+  padding: 12px 15px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 20px;
   box-sizing: border-box;
-  resize: vertical;
+  resize: none;
+  margin-right: 10px;
+  transition: border-color 0.3s;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #007bff;
 }
 
 button {
-  width: 100%;
-  padding: 10px;
-  background-color: #28a745; /* Green for send */
+  padding: 12px 20px;
+  background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s;
 }
 
 button:hover {
-  background-color: #218838;
+  background-color: #0056b3;
+}
+
+.success-message, .error-message {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: 500;
 }
 
 .success-message {
-  color: green;
-  text-align: center;
-  margin-top: 15px;
+  color: #28a745;
 }
 
 .error-message {
-  color: red;
-  text-align: center;
-  margin-top: 15px;
+  color: #dc3545;
 }
 </style>

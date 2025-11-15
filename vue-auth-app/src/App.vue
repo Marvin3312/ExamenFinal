@@ -1,50 +1,33 @@
-<script>
-import LoginForm from './components/LoginForm.vue';
-import MessageForm from './components/MessageForm.vue';
-import MessageList from './components/MessageList.vue';
-
-export default {
-  components: {
-    LoginForm,
-    MessageForm,
-    MessageList,
-  },
-  data() {
-    return {
-      isLoggedIn: false,
-    };
-  },
-  created() {
-    // Check if token exists in localStorage on app load
-    if (localStorage.getItem('authToken')) {
-      this.isLoggedIn = true;
-    }
-  },
-  methods: {
-    handleLoginSuccess() {
-      this.isLoggedIn = true;
-    },
-  },
-};
-</script>
-
 <template>
   <div id="app">
-    <LoginForm v-if="!isLoggedIn" @login-success="handleLoginSuccess" />
-    <div v-else>
-      <MessageForm />
-      <MessageList />
-    </div>
+    <router-view />
   </div>
 </template>
 
-<style scoped>
+<script>
+export default {
+  name: 'App',
+};
+</script>
+
+<style>
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+
+/* Utility Classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 </style>
